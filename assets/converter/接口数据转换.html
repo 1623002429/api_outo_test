@@ -1,0 +1,792 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>接口数据转 YAML</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --panel: #fff;
+      --line: #d7dce3;
+      --text: #1f2933;
+      --muted: #667085;
+      --accent: #1867c9;
+      --danger: #b42318;
+      --ok: #067647;
+      --shadow: 0 8px 22px rgba(16, 24, 40, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+      font-size: 14px;
+    }
+    header {
+      padding: 18px 24px 12px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    main {
+      width: min(1560px, 100%);
+      margin: 0 auto;
+      padding: 16px 18px 22px;
+    }
+    .toolbar {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(120px, 1fr));
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    label {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      outline: none;
+    }
+    input, select {
+      height: 36px;
+      padding: 0 10px;
+    }
+    textarea {
+      min-height: 560px;
+      padding: 12px;
+      resize: vertical;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.55;
+      white-space: pre;
+      tab-size: 2;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(24, 103, 201, .12);
+    }
+    .checks {
+      grid-column: span 2;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      align-items: center;
+      min-height: 36px;
+      color: var(--text);
+    }
+    .checks label {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .checks input {
+      width: 15px;
+      height: 15px;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    button {
+      height: 36px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+    button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+    button:hover { border-color: var(--accent); }
+    .workbench {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+    .pane {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .pane-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .pane-title { font-weight: 700; }
+    .pane-tools {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .pane-tools button {
+      height: 30px;
+      padding: 0 10px;
+      font-size: 13px;
+    }
+    .status {
+      margin-top: 12px;
+      min-height: 22px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .status.error { color: var(--danger); }
+    .status.ok { color: var(--ok); }
+    @media (max-width: 1100px) {
+      .toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .checks { grid-column: span 2; }
+      .actions { justify-content: flex-start; }
+      .workbench { grid-template-columns: 1fr; }
+      textarea { min-height: 420px; }
+    }
+    @media (max-width: 640px) {
+      header { padding: 16px; }
+      main { padding: 12px; }
+      .toolbar { grid-template-columns: 1fr; }
+      .checks { grid-column: span 1; }
+      .actions { flex-wrap: wrap; }
+      button { flex: 1 1 auto; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>接口数据转 YAML</h1>
+    <p class="sub">支持 curl、feapder.Request 代码片段，也支持只粘贴 JSON 请求体；可输出完整测试用例，也可只转换原始请求数据。</p>
+  </header>
+
+  <main>
+    <section class="toolbar" aria-label="转换配置">
+      <label>
+        模块名
+        <input id="moduleName" value="接口模块" placeholder="例如：主题管理">
+      </label>
+      <label>
+        用例名
+        <input id="caseName" value="接口用例" placeholder="例如：删除主题">
+      </label>
+      <label>
+        断言状态码
+        <select id="statusCode">
+          <option value="auto">自动判断</option>
+          <option value="200">200</option>
+          <option value="201">201</option>
+          <option value="204">204</option>
+          <option value="">不生成</option>
+        </select>
+      </label>
+      <label>
+        多条用例命名
+        <select id="nameMode">
+          <option value="suffix">用例名 + 序号</option>
+          <option value="method">方法 + 路径</option>
+        </select>
+      </label>
+      <label>
+        JSON 模式方法
+        <select id="jsonMethod">
+          <option value="">自动判断/不填写</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+          <option value="DELETE">DELETE</option>
+          <option value="GET">GET</option>
+          <option value="PATCH">PATCH</option>
+        </select>
+      </label>
+      <label>
+        JSON 模式路径
+        <input id="jsonPath" value="" placeholder="未提供则留空，可填 /api/path 或完整 URL">
+      </label>
+      <div class="checks">
+        <label><input id="includeHeaders" type="checkbox">输出 headers</label>
+        <label><input id="includeCookies" type="checkbox">输出 cookies</label>
+        <label><input id="includeHost" type="checkbox">输出 host</label>
+        <label><input id="skipFalse" type="checkbox" checked>输出 skip: false</label>
+        <label><input id="rawOnly" type="checkbox">只转换原始数据</label>
+      </div>
+      <div class="actions">
+        <button id="clearBtn" type="button">清空</button>
+        <button id="convertBtn" class="primary" type="button">转换</button>
+      </div>
+    </section>
+
+    <section class="workbench">
+      <div class="pane">
+        <div class="pane-head">
+          <div class="pane-title">原始数据</div>
+          <div class="pane-tools">
+            <button id="sampleBtn" type="button">填入示例</button>
+          </div>
+        </div>
+        <textarea id="input" spellcheck="false" placeholder="把 curl、feapder.Request 代码或单独 JSON 粘贴到这里"></textarea>
+      </div>
+
+      <div class="pane">
+        <div class="pane-head">
+          <div class="pane-title">YAML 输出</div>
+          <div class="pane-tools">
+            <button id="copyBtn" type="button">复制</button>
+            <button id="downloadBtn" type="button">下载</button>
+          </div>
+        </div>
+        <textarea id="output" spellcheck="false" placeholder="转换结果会显示在这里"></textarea>
+      </div>
+    </section>
+
+    <div id="status" class="status"></div>
+  </main>
+
+  <script>
+    const els = {
+      moduleName: document.getElementById("moduleName"),
+      caseName: document.getElementById("caseName"),
+      statusCode: document.getElementById("statusCode"),
+      nameMode: document.getElementById("nameMode"),
+      jsonMethod: document.getElementById("jsonMethod"),
+      jsonPath: document.getElementById("jsonPath"),
+      includeHeaders: document.getElementById("includeHeaders"),
+      includeCookies: document.getElementById("includeCookies"),
+      includeHost: document.getElementById("includeHost"),
+      skipFalse: document.getElementById("skipFalse"),
+      rawOnly: document.getElementById("rawOnly"),
+      input: document.getElementById("input"),
+      output: document.getElementById("output"),
+      status: document.getElementById("status"),
+      convertBtn: document.getElementById("convertBtn"),
+      clearBtn: document.getElementById("clearBtn"),
+      copyBtn: document.getElementById("copyBtn"),
+      downloadBtn: document.getElementById("downloadBtn"),
+      sampleBtn: document.getElementById("sampleBtn")
+    };
+
+    const sampleCurl = `curl 'https://daas-api-test.inovance.com/xcor/v1/4/assets-domains?projectId=26' \\
+  -X 'DELETE' \\
+  -H 'accept: application/json, text/plain, */*' \\
+  -H 'content-type: application/json;charset=UTF-8' \\
+  -b '_hatt=94212f756871cd0ccc262d44add52dfe; FENCE_TOKEN_TEST_FLAG=dHJ1ZQ' \\
+  --data-raw '{"domainId":"1423","domainName":"主题名称202606101117381","domainDesc":"描述20260610111738","enabledFlag":1,"projectId":26,"tenantId":4,"domainCode":"主题编码20260610111738","parentId":0,"domainType":"GROUP","domainPath":"主题名称202606101117381","sortNum":0,"levelSequence":0,"levelMeaning":"主题域","__dirty":false}'`;
+
+    function setStatus(text, type) {
+      els.status.textContent = text || "";
+      els.status.className = "status" + (type ? " " + type : "");
+    }
+
+    function normalizeCurlText(text) {
+      return text.replace(/\r\n/g, "\n").replace(/\\\n/g, " ").replace(/\^\n/g, " ").trim();
+    }
+
+    function splitShell(input) {
+      const tokens = [];
+      let token = "";
+      let quote = null;
+      let escaped = false;
+      for (let i = 0; i < input.length; i++) {
+        const ch = input[i];
+        if (escaped) {
+          token += ch;
+          escaped = false;
+          continue;
+        }
+        if (ch === "\\" && quote !== "'") {
+          escaped = true;
+          continue;
+        }
+        if ((ch === "'" || ch === '"') && !quote) {
+          quote = ch;
+          continue;
+        }
+        if (ch === quote) {
+          quote = null;
+          continue;
+        }
+        if (/\s/.test(ch) && !quote) {
+          if (token) {
+            tokens.push(token);
+            token = "";
+          }
+          continue;
+        }
+        token += ch;
+      }
+      if (token) tokens.push(token);
+      return tokens;
+    }
+
+    function splitCurlCommands(text) {
+      const normalized = text.replace(/\r\n/g, "\n").trim();
+      if (!normalized) return [];
+      const lines = normalized.split("\n");
+      const groups = [];
+      let current = [];
+      for (const line of lines) {
+        if (/^\s*curl\b/i.test(line) && current.length) {
+          groups.push(current.join("\n"));
+          current = [line];
+        } else {
+          current.push(line);
+        }
+      }
+      if (current.length) groups.push(current.join("\n"));
+      return groups.filter(group => /\bcurl\b/i.test(group));
+    }
+
+    function parseCookieString(raw) {
+      const cookies = {};
+      String(raw || "").split(";").forEach(part => {
+        const trimmed = part.trim();
+        if (!trimmed) return;
+        const eq = trimmed.indexOf("=");
+        cookies[eq === -1 ? trimmed : trimmed.slice(0, eq).trim()] = eq === -1 ? "" : trimmed.slice(eq + 1).trim();
+      });
+      return cookies;
+    }
+
+    function parseJsonLike(value) {
+      if (value == null || value === "") return undefined;
+      const trimmed = String(value).trim();
+      try {
+        return JSON.parse(trimmed);
+      } catch (err) {
+        return trimmed;
+      }
+    }
+
+    function valueFromSearchParam(value) {
+      if (value === "true") return true;
+      if (value === "false") return false;
+      if (value !== "" && /^-?\d+(\.\d+)?$/.test(value)) return Number(value);
+      return value;
+    }
+
+    function parseCurl(text) {
+      const tokens = splitShell(normalizeCurlText(text));
+      const firstCurl = tokens.findIndex(t => /^curl$/i.test(t) || /^curl\.exe$/i.test(t));
+      if (firstCurl === -1) throw new Error("没有识别到 curl 命令");
+
+      let url = "";
+      let method = "";
+      let dataRaw;
+      const headers = {};
+      let cookies = {};
+
+      for (let i = firstCurl + 1; i < tokens.length; i++) {
+        const token = tokens[i];
+        const next = tokens[i + 1];
+        if (!url && !token.startsWith("-")) {
+          url = token;
+          continue;
+        }
+        if (token === "-X" || token === "--request") {
+          method = String(next || "").toUpperCase();
+          i++;
+        } else if (token.startsWith("-X") && token.length > 2) {
+          method = token.slice(2).toUpperCase();
+        } else if (token === "-H" || token === "--header") {
+          const header = String(next || "");
+          const colon = header.indexOf(":");
+          if (colon > -1) headers[header.slice(0, colon).trim()] = header.slice(colon + 1).trim();
+          i++;
+        } else if (token === "-b" || token === "--cookie" || token === "--cookie-raw") {
+          cookies = { ...cookies, ...parseCookieString(next || "") };
+          i++;
+        } else if (["--data", "--data-raw", "--data-binary", "--data-ascii", "-d"].includes(token)) {
+          dataRaw = next || "";
+          i++;
+        } else if (token.startsWith("--data-raw=")) {
+          dataRaw = token.slice("--data-raw=".length);
+        } else if (token.startsWith("--data=")) {
+          dataRaw = token.slice("--data=".length);
+        } else if (token.startsWith("-d") && token.length > 2) {
+          dataRaw = token.slice(2);
+        }
+      }
+
+      if (!url) throw new Error("没有识别到请求 URL");
+      const parsedUrl = new URL(url);
+      const params = {};
+      parsedUrl.searchParams.forEach((value, key) => {
+        const parsedValue = valueFromSearchParam(value);
+        params[key] = Object.prototype.hasOwnProperty.call(params, key)
+          ? (Array.isArray(params[key]) ? [...params[key], parsedValue] : [params[key], parsedValue])
+          : parsedValue;
+      });
+
+      const body = parseJsonLike(dataRaw);
+      if (!method) method = dataRaw == null ? "GET" : "POST";
+
+      return {
+        method,
+        host: parsedUrl.origin,
+        path: parsedUrl.pathname,
+        params,
+        headers,
+        cookies,
+        json: body && typeof body === "object" && !Array.isArray(body) ? body : undefined,
+        data: body && (typeof body !== "object" || Array.isArray(body)) ? body : undefined
+      };
+    }
+
+    function extractObjectLiteral(source, varName) {
+      const re = new RegExp(varName + "\\s*=\\s*\\{", "m");
+      const match = re.exec(source);
+      if (!match) return undefined;
+      return readBalancedObject(source, match.index + match[0].lastIndexOf("{"));
+    }
+
+    function readBalancedObject(source, start) {
+      let depth = 0;
+      let quote = null;
+      let escaped = false;
+      for (let i = start; i < source.length; i++) {
+        const ch = source[i];
+        if (escaped) {
+          escaped = false;
+          continue;
+        }
+        if (ch === "\\" && quote) {
+          escaped = true;
+          continue;
+        }
+        if ((ch === "'" || ch === '"') && !quote) {
+          quote = ch;
+          continue;
+        }
+        if (ch === quote) {
+          quote = null;
+          continue;
+        }
+        if (quote) continue;
+        if (ch === "{") depth++;
+        if (ch === "}") {
+          depth--;
+          if (depth === 0) return source.slice(start, i + 1);
+        }
+      }
+      return undefined;
+    }
+
+    function pythonDictToJsonObject(text) {
+      if (!text) return undefined;
+      const fixed = text
+        .replace(/\bNone\b/g, "null")
+        .replace(/\bTrue\b/g, "true")
+        .replace(/\bFalse\b/g, "false")
+        .replace(/'/g, '"')
+        .replace(/,\s*}/g, "}");
+      try {
+        return JSON.parse(fixed);
+      } catch (err) {
+        return undefined;
+      }
+    }
+
+    function parseFeapder(text) {
+      const baseMatch = /base_url\s*=\s*["']([^"']+)["']/.exec(text) || /Request\(\s*["']([^"']+)["']/.exec(text);
+      if (!baseMatch) throw new Error("没有识别到 feapder 的 base_url");
+      const methodMatch = /method\s*=\s*["']([A-Za-z]+)["']/.exec(text);
+      const url = new URL(baseMatch[1]);
+      const queryParams = {};
+      url.searchParams.forEach((value, key) => queryParams[key] = valueFromSearchParam(value));
+
+      const params = { ...queryParams, ...(pythonDictToJsonObject(extractObjectLiteral(text, "params")) || {}) };
+      const headers = pythonDictToJsonObject(extractObjectLiteral(text, "headers")) || {};
+      const cookies = pythonDictToJsonObject(extractObjectLiteral(text, "cookies")) || {};
+
+      let json;
+      const jsonArg = /json\s*=\s*\{/.exec(text);
+      if (jsonArg) json = pythonDictToJsonObject(readBalancedObject(text, jsonArg.index + jsonArg[0].lastIndexOf("{")));
+
+      return {
+        method: methodMatch ? methodMatch[1].toUpperCase() : "GET",
+        host: url.origin,
+        path: url.pathname,
+        params,
+        headers,
+        cookies,
+        json
+      };
+    }
+
+    function parseJsonOnly(text) {
+      let json;
+      try {
+        json = JSON.parse(text);
+      } catch (err) {
+        throw new Error("没有识别到 curl/feapder，且内容不是合法 JSON：" + err.message);
+      }
+      const method = (els.jsonMethod.value || "").toUpperCase();
+      const rawPath = (els.jsonPath.value || "").trim();
+      let host = "";
+      let path = rawPath || "";
+      const params = {};
+
+      if (/^https?:\/\//i.test(rawPath)) {
+        const parsedUrl = new URL(rawPath);
+        host = parsedUrl.origin;
+        path = parsedUrl.pathname;
+        parsedUrl.searchParams.forEach((value, key) => params[key] = valueFromSearchParam(value));
+      } else if (rawPath.includes("?")) {
+        const fakeUrl = new URL(rawPath, "https://local.invalid");
+        path = fakeUrl.pathname;
+        fakeUrl.searchParams.forEach((value, key) => params[key] = valueFromSearchParam(value));
+      }
+
+      return { method, host, path, params, json };
+    }
+
+    function parseInput(text) {
+      if (/\bcurl\b/i.test(text)) return splitCurlCommands(text).map(parseCurl);
+      if (/feapder\.Request|base_url\s*=|yield\s+feapder/i.test(text)) return [parseFeapder(text)];
+      return [parseJsonOnly(text)];
+    }
+
+    function isPlainObject(value) {
+      return value && typeof value === "object" && !Array.isArray(value);
+    }
+
+    function shouldQuoteYamlString(text) {
+      const trimmed = text.trim();
+      if (trimmed !== text) return true;
+      if (/^\d{4}-\d{2}-\d{2}([ T]\d{2}:\d{2}:\d{2})?$/.test(text)) return true;
+      if (/^\d+(?:\.\d+){2,}$/.test(text)) return true;
+      if (/^[\[{].*[\]}]$/.test(text)) return true;
+      if (/^(true|false|null|yes|no|on|off)$/i.test(text)) return true;
+      return false;
+    }
+
+    function yamlScalar(value) {
+      if (value === null) return "null";
+      if (value === undefined) return "";
+      if (typeof value === "number" || typeof value === "boolean") return String(value);
+      const text = String(value);
+      if (text === "") return '""';
+      if (/^\$\{[^}]+}$/.test(text)) return text;
+      if (shouldQuoteYamlString(text)) return JSON.stringify(text);
+      if (!/[:#,[\]{}&*!|>'"%@`]/.test(text)) return text;
+      if (/^[A-Za-z0-9_./:@${}\-]+$/.test(text) && !/^(true|false|null|yes|no|on|off)$/i.test(text)) return text;
+      return JSON.stringify(text);
+    }
+
+    function objectToYaml(value, indent = 0) {
+      const pad = " ".repeat(indent);
+      if (Array.isArray(value)) {
+        if (!value.length) return pad + "[]\n";
+        return value.map(item => {
+          if (isPlainObject(item)) {
+            const entries = Object.entries(item).filter(([, v]) => v !== undefined);
+            if (!entries.length) return pad + "- {}\n";
+            const [firstKey, firstVal] = entries[0];
+            let out = "";
+            if (isPlainObject(firstVal) || Array.isArray(firstVal)) {
+              out += pad + "- " + firstKey + ":\n" + objectToYaml(firstVal, indent + 4);
+            } else {
+              out += pad + "- " + firstKey + ": " + yamlScalar(firstVal) + "\n";
+            }
+            for (const [key, val] of entries.slice(1)) {
+              if (isPlainObject(val) || Array.isArray(val)) {
+                out += pad + "  " + key + ":\n" + objectToYaml(val, indent + 4);
+              } else {
+                out += pad + "  " + key + ": " + yamlScalar(val) + "\n";
+              }
+            }
+            return out;
+          }
+          if (Array.isArray(item)) return pad + "-\n" + objectToYaml(item, indent + 2);
+          return pad + "- " + yamlScalar(item) + "\n";
+        }).join("");
+      }
+      if (isPlainObject(value)) {
+        const entries = Object.entries(value).filter(([, v]) => v !== undefined);
+        if (!entries.length) return pad + "{}\n";
+        return entries.map(([key, val]) => {
+          if (isPlainObject(val) || Array.isArray(val)) return pad + key + ":\n" + objectToYaml(val, indent + 2);
+          return pad + key + ": " + yamlScalar(val) + "\n";
+        }).join("");
+      }
+      return pad + yamlScalar(value) + "\n";
+    }
+
+    function expectedStatus(method, selected) {
+      if (selected && selected !== "auto") return Number(selected);
+      if (selected === "") return null;
+      return method === "DELETE" ? 204 : 200;
+    }
+
+    function caseNameFor(req, index, total) {
+      const base = els.caseName.value.trim() || "接口用例";
+      if (els.nameMode.value === "method") return `${req.method} ${req.path}`;
+      return total > 1 ? `${base}${index + 1}` : base;
+    }
+
+    function toSnakeCase(key) {
+      return String(key)
+        .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
+        .replace(/[\s-]+/g, "_")
+        .replace(/[^A-Za-z0-9_\u4e00-\u9fa5]/g, "_")
+        .replace(/_+/g, "_")
+        .replace(/^_|_$/g, "")
+        .toLowerCase() || "value";
+    }
+
+    function jsonPathForKey(key) {
+      return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key) ? "$." + key : "$['" + key.replace(/'/g, "\\'") + "']";
+    }
+
+    function autoExtract(json) {
+      if (!isPlainObject(json)) return undefined;
+      const extract = {};
+      Object.keys(json).forEach(key => {
+        const value = json[key];
+        if (value === null || ["string", "number", "boolean"].includes(typeof value)) {
+          extract[toSnakeCase(key)] = jsonPathForKey(key);
+        }
+      });
+      return Object.keys(extract).length ? extract : undefined;
+    }
+
+    function requestToRaw(req) {
+      const item = {};
+      if (els.includeHost.checked && req.host) item.host = req.host;
+      if (Object.keys(req.params || {}).length) item.params = req.params;
+      if (els.includeHeaders.checked && Object.keys(req.headers || {}).length) item.headers = req.headers;
+      if (els.includeCookies.checked && Object.keys(req.cookies || {}).length) item.cookies = req.cookies;
+      if (req.json !== undefined) item.json = req.json;
+      if (req.data !== undefined) item.data = req.data;
+      return item;
+    }
+
+    function requestToCase(req, index, total) {
+      const item = { name: caseNameFor(req, index, total) };
+      if (els.skipFalse.checked) item.skip = false;
+      item.method = req.method || "";
+      if (els.includeHost.checked && req.host) item.host = req.host;
+      item.path = req.path || "";
+      if (Object.keys(req.params || {}).length) item.params = req.params;
+      if (els.includeHeaders.checked && Object.keys(req.headers || {}).length) item.headers = req.headers;
+      if (els.includeCookies.checked && Object.keys(req.cookies || {}).length) item.cookies = req.cookies;
+      if (req.json !== undefined) item.json = req.json;
+      if (req.data !== undefined) item.data = req.data;
+
+      const extract = autoExtract(req.json);
+      if (extract) item.extract = extract;
+
+      const status = expectedStatus(req.method, els.statusCode.value);
+      if (status) {
+        item.asserts = [{ type: "status_code", expected: status }];
+        if (status === 204) item.asserts.push({ type: "empty_body" });
+      }
+      return item;
+    }
+
+    function convert() {
+      try {
+        const text = els.input.value.trim();
+        if (!text) {
+          setStatus("请先粘贴 curl、feapder 代码或 JSON。", "error");
+          return;
+        }
+        const requests = parseInput(text);
+        let doc;
+        if (els.rawOnly.checked) {
+          const rawItems = requests.map(requestToRaw);
+          doc = rawItems.length === 1 ? rawItems[0] : rawItems;
+        } else {
+          doc = {
+            module: els.moduleName.value.trim() || "接口模块",
+            cases: requests.map((req, index) => requestToCase(req, index, requests.length))
+          };
+        }
+        els.output.value = objectToYaml(doc, 0).trimEnd() + "\n";
+        setStatus(`转换完成：共生成 ${requests.length} 条。`, "ok");
+      } catch (err) {
+        setStatus("转换失败：" + err.message, "error");
+      }
+    }
+
+    async function copyOutput() {
+      if (!els.output.value.trim()) {
+        setStatus("没有可复制的 YAML。", "error");
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(els.output.value);
+        setStatus("已复制到剪贴板。", "ok");
+      } catch (err) {
+        els.output.select();
+        document.execCommand("copy");
+        setStatus("已尝试复制，如浏览器拦截请手动 Ctrl+C。", "ok");
+      }
+    }
+
+    function downloadOutput() {
+      if (!els.output.value.trim()) {
+        setStatus("没有可下载的 YAML。", "error");
+        return;
+      }
+      const blob = new Blob([els.output.value], { type: "text/yaml;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "api_cases.yaml";
+      link.click();
+      URL.revokeObjectURL(link.href);
+      setStatus("已生成下载文件。", "ok");
+    }
+
+    els.convertBtn.addEventListener("click", convert);
+    els.copyBtn.addEventListener("click", copyOutput);
+    els.downloadBtn.addEventListener("click", downloadOutput);
+    els.clearBtn.addEventListener("click", () => {
+      els.input.value = "";
+      els.output.value = "";
+      setStatus("");
+    });
+    els.sampleBtn.addEventListener("click", () => {
+      els.input.value = sampleCurl;
+      convert();
+    });
+  </script>
+</body>
+</html>

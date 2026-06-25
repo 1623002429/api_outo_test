@@ -1,0 +1,193 @@
+module: 主题管理
+cases:
+  - name: 创建主题
+    skip: false
+    method: POST
+    path: /xcor/v1/4/assets-domains
+    params:
+      projectId: 26
+    json:
+      domainType: GROUP
+      domainCode: 主题编码${timestamp}
+      domainName: 主题名称${timestamp}
+      domainDesc: 描述${timestamp}
+      sortNum: 0
+      __dirty: true
+      _status: create
+    extract:
+      domain_id: $.domainId
+      domain_name: $.domainName
+      domain_code: $.domainCode
+      domain_desc: $.domainDesc
+      domain_token: $._token
+      object_version_number: $.objectVersionNumber
+    asserts:
+      - type: status_code
+        expected: 200
+      - type: json_equal
+        path: $.domainType
+        expected: GROUP
+      - type: json_equal
+        path: $._status
+        expected: create
+
+  - name: 查询创建的主题
+    skip: false
+    method: GET
+    path: /xcor/v1/4/assets-domains
+    params:
+      domainName: ${ctx.domain_name}
+      page: 0
+      projectId: 26
+      size: 10
+    extract:
+      query_domain_id: $.content[0].domainId
+      query_creation_date: $.content[0].creationDate
+      query_created_by: $.content[0].createdBy
+      query_last_update_date: $.content[0].lastUpdateDate
+      query_last_updated_by: $.content[0].lastUpdatedBy
+      query_enabled_flag: $.content[0].enabledFlag
+      query_level_sequence: $.content[0].levelSequence
+      query_level_meaning: $.content[0].levelMeaning
+    asserts:
+      - type: status_code
+        expected: 200
+      - type: json_equal
+        path: $.totalElements
+        expected: 1
+      - type: json_equal
+        path: $.content[0].domainName
+        expected: ${ctx.domain_name}
+
+  - name: 创建后编辑主题
+    skip: false
+    method: PUT
+    path: /xcor/v1/4/assets-domains
+    params:
+      projectId: 26
+    json:
+      creationDate: ${ctx.query_creation_date}
+      createdBy: ${ctx.query_created_by}
+      lastUpdateDate: ${ctx.query_last_update_date}
+      lastUpdatedBy: ${ctx.query_last_updated_by}
+      objectVersionNumber: ${ctx.object_version_number}
+      _token: ${ctx.domain_token}
+      domainId: ${ctx.domain_id}
+      domainName: ${ctx.domain_name}1
+      domainDesc: ${ctx.domain_desc}
+      enabledFlag: ${ctx.query_enabled_flag}
+      projectId: 26
+      tenantId: 4
+      domainCode: ${ctx.domain_code}
+      parentId: 0
+      domainType: GROUP
+      domainPath: ${ctx.domain_name}
+      sortNum: 0
+      levelSequence: ${ctx.query_level_sequence}
+      levelMeaning: ${ctx.query_level_meaning}
+      __dirty: true
+      _status: update
+    extract:
+      updated_domain_name: $.domainName
+      updated_domain_path: $.domainPath
+      updated_object_version_number: $.objectVersionNumber
+      updated_domain_token: $._token
+    asserts:
+      - type: status_code
+        expected: 200
+      - type: json_equal
+        path: $._status
+        expected: update
+      - type: json_equal
+        path: $.domainName
+        expected: ${ctx.domain_name}1
+
+  - name: 根据主题创建子主题
+    skip: false
+    method: POST
+    path: /xcor/v1/4/assets-domains
+    params:
+      projectId: 26
+    json:
+      domainType: DOMAIN
+      domainCode: 子主题编码${timestamp}
+      domainName: 子主题名称${timestamp}
+      parentName: ${ctx.updated_domain_name}
+      parentId: ${ctx.domain_id}
+      domainDesc: 子主题描述
+      sortNum: 0
+      __dirty: true
+      _status: create
+    extract:
+      child_domain_id: $.domainId
+      child_domain_name: $.domainName
+      child_domain_code: $.domainCode
+      child_domain_desc: $.domainDesc
+      child_domain_token: $._token
+      child_object_version_number: $.objectVersionNumber
+      child_domain_path: $.domainPath
+    asserts:
+      - type: status_code
+        expected: 200
+      - type: json_equal
+        path: $.parentId
+        expected: ${ctx.domain_id}
+      - type: json_contains
+        path: $.domainPath
+        expected: ${ctx.updated_domain_name}
+
+  - name: 删除子主题
+    skip: false
+    method: DELETE
+    path: /xcor/v1/4/assets-domains
+    params:
+      projectId: 26
+    json:
+      objectVersionNumber: ${ctx.child_object_version_number}
+      _token: ${ctx.child_domain_token}
+      domainId: ${ctx.child_domain_id}
+      domainName: ${ctx.child_domain_name}
+      domainDesc: ${ctx.child_domain_desc}
+      enabledFlag: 1
+      projectId: 26
+      tenantId: 4
+      domainCode: ${ctx.child_domain_code}
+      parentId: ${ctx.domain_id}
+      domainType: DOMAIN
+      domainPath: ${ctx.child_domain_path}
+      sortNum: 0
+      levelSequence: 1
+      levelMeaning: 主题
+      __dirty: false
+    asserts:
+      - type: status_code
+        expected: 204
+      - type: empty_body
+
+  - name: 删除主题
+    skip: false
+    method: DELETE
+    path: /xcor/v1/4/assets-domains
+    params:
+      projectId: 26
+    json:
+      objectVersionNumber: ${ctx.updated_object_version_number}
+      _token: ${ctx.updated_domain_token}
+      domainId: ${ctx.domain_id}
+      domainName: ${ctx.updated_domain_name}
+      domainDesc: ${ctx.domain_desc}
+      enabledFlag: 1
+      projectId: 26
+      tenantId: 4
+      domainCode: ${ctx.domain_code}
+      parentId: 0
+      domainType: GROUP
+      domainPath: ${ctx.updated_domain_path}
+      sortNum: 0
+      levelSequence: 0
+      levelMeaning: 主题域
+      __dirty: false
+    asserts:
+      - type: status_code
+        expected: 204
+      - type: empty_body

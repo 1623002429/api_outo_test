@@ -1,0 +1,3 @@
+display_name: API Auto Test Framework
+short_description: Generate and maintain the user's pytest API automation framework.
+default_prompt: 帮我基于这个接口自动化框架添加模块、生成 YAML 用例、调试接口关联、运行测试并生成 Allure 报告。

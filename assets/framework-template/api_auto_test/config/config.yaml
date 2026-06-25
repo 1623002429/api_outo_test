@@ -1,0 +1,30 @@
+env: test
+
+test:
+  base_url: https://daas-api-test.inovance.com
+  tenant_id: 4
+  project_id: 26
+  timeout: 20
+  verify_ssl: true
+
+  # Put the real login token in DAAS_AUTHORIZATION, or replace this value directly.
+  # Headers here are global and will be added to every request.
+  headers:
+    accept: application/json, text/plain, */*
+    accept-language: zh-CN,zh;q=0.9
+    authorization: bearer 160f48ae-a920-4ed4-b2c2-d29ca51db75b
+    cache-control: no-cache
+    content-type: application/json;charset=UTF-8
+    h-menu-id: "-1"
+    h-request-id: 544e08ab0980eac1391416ab8ae5671e20aa3a0601871
+    origin: https://daas-test.inovance.com
+    pragma: no-cache
+    priority: u=1, i
+    referer: https://daas-test.inovance.com/
+    sec-ch-ua: '"Chromium";v="148", "Google Chrome";v="148", "Not/A)Brand";v="99"'
+    sec-ch-ua-mobile: ?0
+    sec-ch-ua-platform: '"Windows"'
+    sec-fetch-dest: empty
+    sec-fetch-mode: cors
+    sec-fetch-site: same-site
+    user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36

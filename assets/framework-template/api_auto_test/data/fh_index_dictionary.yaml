@@ -1,0 +1,534 @@
+module: 复合指标字典
+cases:
+  - name: 复合指标创建
+    skip: false
+    method: POST
+    path: /daas-xmod/v1/4/indexs
+    params:
+      projectId: 26
+    json:
+      bizMeaning: 业务口径
+      sqlMeaning: 指标口径
+      indexType: COMPOSITE_INDEX
+      indexCode: fh_muzi_test_${timestamp}_bm
+      tagStr: "月销量,年利润,人均消费,电子商务"
+      indexName: fh_muzi_test_${timestamp}_mc
+      indexNameEn: 英文名称
+      indexUnit: 指标单位
+      indexCommonName: 常用名
+      indexDesc: 指标描述
+      indexFrequency: ONCE_A_DAY
+      domainPath: XDSP默认分组/OA
+      bizRespDept: 6526
+      bizRespOwner: 119291
+      chargerTel: 18888888888
+      bizAskDept: 1780
+      enableDateFrom: "2026-06-24 00:00:00"
+      enableDateTo: "2030-06-26 00:00:00"
+      testV4: 123
+      testV3: EQUAL
+      domainId: 5
+      domainName: OA
+      extendParam:
+        indexType: COMPOSITE_INDEX
+        indexCode: fh_muzi_test_${timestamp}_bm
+        tagStr:
+          - 月销量
+          - 年利润
+          - 人均消费
+          - 电子商务
+        indexName: fh_muzi_test_${timestamp}_mc
+        indexNameEn: 英文名称
+        indexUnit: 指标单位
+        indexCommonName: 常用名
+        indexDesc: 指标描述
+        indexFrequency: ONCE_A_DAY
+        domainPath: 5
+        bizRespDept: 6526
+        bizRespOwner: 119291
+        chargerTel: 18888888888
+        chargerEmail: ""
+        bizAskDept: 1780
+        securityLevelStr: ""
+        enableDateFrom: "2026-06-24 00:00:00"
+        enableDateTo: "2030-06-26 00:00:00"
+        testV4: 123
+        testV3: EQUAL
+      modelLineDTOList:
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2026-03-17 12:23:42"
+          lastUpdatedBy: 12473
+          objectVersionNumber: 5
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1110
+          modelHeaderId: 122
+          attributeCode: indexType
+          attributeName: 指标类型
+          modelType: TECHNOLOGY
+          modelOrder: 0
+          embeddedFlag: 1
+          extConfig: "[{}]"
+          dataType: STRING
+          requiredFlag: 1
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: COMBOBOX
+          lovCode: XMOD.INDEX_TYPE
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2026-03-17 12:23:43"
+          lastUpdatedBy: 12473
+          objectVersionNumber: 3
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1105
+          modelHeaderId: 122
+          attributeCode: indexCode
+          attributeName: 指标编码
+          modelType: TECHNOLOGY
+          modelOrder: 1
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"indexCode\"}]"
+          dataType: STRING
+          requiredFlag: 1
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2026-03-17 12:23:44"
+          lastUpdatedBy: 12473
+          objectVersionNumber: 5
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1113
+          modelHeaderId: 122
+          attributeCode: tagStr
+          attributeName: 指标标签
+          modelType: TECHNOLOGY
+          modelOrder: 5
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"tagStr\"}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: COMBOBOX
+          lovCode: XMOD.NORMAL_INDEX_TAGS
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2026-03-17 12:23:49"
+          lastUpdatedBy: 12473
+          objectVersionNumber: 5
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1109
+          modelHeaderId: 122
+          attributeCode: indexName
+          attributeName: 指标名称
+          modelType: TECHNOLOGY
+          modelOrder: 10
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"indexName\"}]"
+          dataType: STRING
+          requiredFlag: 1
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2026-01-20 15:48:31"
+          createdBy: 2
+          lastUpdateDate: "2026-01-20 15:48:31"
+          lastUpdatedBy: 2
+          objectVersionNumber: 1
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 2363
+          modelHeaderId: 122
+          attributeCode: indexNameEn
+          attributeName: 指标英文名称
+          modelType: TECHNOLOGY
+          modelOrder: 11
+          embeddedFlag: 0
+          extConfig: "[{}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 1
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          lovCode: ""
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2026-03-17 12:23:50"
+          lastUpdatedBy: 12473
+          objectVersionNumber: 3
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1111
+          modelHeaderId: 122
+          attributeCode: indexUnit
+          attributeName: 指标单位
+          modelType: TECHNOLOGY
+          modelOrder: 15
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"indexUnit\"}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2026-03-17 12:23:50"
+          lastUpdatedBy: 12473
+          objectVersionNumber: 3
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1106
+          modelHeaderId: 122
+          attributeCode: indexCommonName
+          attributeName: 指标常用名
+          modelType: TECHNOLOGY
+          modelOrder: 20
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"indexCommonName\"}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2026-03-17 12:23:54"
+          lastUpdatedBy: 12473
+          objectVersionNumber: 3
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1107
+          modelHeaderId: 122
+          attributeCode: indexDesc
+          attributeName: 指标描述
+          modelType: TECHNOLOGY
+          modelOrder: 30
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"indexDesc\"}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2026-03-17 12:23:51"
+          lastUpdatedBy: 12473
+          objectVersionNumber: 3
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1108
+          modelHeaderId: 122
+          attributeCode: indexFrequency
+          attributeName: 统计频率
+          modelType: TECHNOLOGY
+          modelOrder: 25
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"indexFrequencyMeaning\"}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: COMBOBOX
+          lovCode: XMOD.INDEX_FREQUENCY
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2026-03-17 12:23:58"
+          lastUpdatedBy: 12473
+          objectVersionNumber: 5
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1102
+          modelHeaderId: 122
+          attributeCode: domainPath
+          attributeName: 主题域
+          modelType: TECHNOLOGY
+          modelOrder: 40
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"domainPath\"}]"
+          dataType: STRING
+          requiredFlag: 1
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2024-12-12 20:41:14"
+          lastUpdatedBy: -1
+          objectVersionNumber: 1
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1097
+          modelHeaderId: 122
+          attributeCode: bizRespDept
+          attributeName: 业务责任部门
+          modelType: MANAGEMENT
+          modelOrder: 45
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"bizRespDeptName\",\"displayName\":\"bizRespDeptName\"}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: LOV
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2024-12-12 20:41:14"
+          lastUpdatedBy: -1
+          objectVersionNumber: 1
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1098
+          modelHeaderId: 122
+          attributeCode: bizRespOwner
+          attributeName: 业务责任人
+          modelType: MANAGEMENT
+          modelOrder: 50
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"bizRespOwnerNum\",\"displayName\":\"bizRespOwnerName\"}]"
+          dataType: STRING
+          requiredFlag: 1
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: LOV
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2024-12-12 20:41:14"
+          lastUpdatedBy: -1
+          objectVersionNumber: 1
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1100
+          modelHeaderId: 122
+          attributeCode: chargerTel
+          attributeName: 责任人电话
+          modelType: MANAGEMENT
+          modelOrder: 51
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"chargerTel\"}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          relateParamName: bizRespOwner
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2024-12-12 20:41:14"
+          lastUpdatedBy: -1
+          objectVersionNumber: 1
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1099
+          modelHeaderId: 122
+          attributeCode: chargerEmail
+          attributeName: 责任人邮箱
+          modelType: MANAGEMENT
+          modelOrder: 52
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"chargerEmail\"}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          relateParamName: bizRespOwner
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2024-12-12 20:41:14"
+          lastUpdatedBy: -1
+          objectVersionNumber: 1
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1096
+          modelHeaderId: 122
+          attributeCode: bizAskDept
+          attributeName: 业务需求部门
+          modelType: MANAGEMENT
+          modelOrder: 55
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"bizAskDeptName\",\"displayName\":\"bizAskDeptName\"}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: LOV
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2024-12-12 20:41:14"
+          lastUpdatedBy: -1
+          objectVersionNumber: 1
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1112
+          modelHeaderId: 122
+          attributeCode: securityLevelStr
+          attributeName: 数据密级
+          modelType: MANAGEMENT
+          modelOrder: 60
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"securityLevelStr\"}]"
+          dataType: STRING
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: COMBOBOX
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2024-12-12 20:41:14"
+          lastUpdatedBy: -1
+          objectVersionNumber: 1
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1103
+          modelHeaderId: 122
+          attributeCode: enableDateFrom
+          attributeName: 生效开始时间
+          modelType: MANAGEMENT
+          modelOrder: 65
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"enableDateFrom\"}]"
+          dataType: DATETIME
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2024-12-12 20:41:14"
+          createdBy: -1
+          lastUpdateDate: "2024-12-12 20:41:14"
+          lastUpdatedBy: -1
+          objectVersionNumber: 1
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 1104
+          modelHeaderId: 122
+          attributeCode: enableDateTo
+          attributeName: 生效结束时间
+          modelType: MANAGEMENT
+          modelOrder: 70
+          embeddedFlag: 1
+          extConfig: "[{\"exportName\":\"enableDateTo\"}]"
+          dataType: DATETIME
+          requiredFlag: 0
+          editFlag: 0
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: TEXT
+          enabledFlag: 1
+          tenantId: -1
+          projectId: -1
+        - creationDate: "2026-06-23 17:17:55"
+          createdBy: 67585
+          lastUpdateDate: "2026-06-23 19:13:10"
+          lastUpdatedBy: 67585
+          objectVersionNumber: 15
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 3595
+          modelHeaderId: 122
+          attributeCode: testV4
+          attributeName: testV4
+          modelType: BUSINESS
+          modelOrder: 20
+          embeddedFlag: 0
+          extConfig: "[{}]"
+          dataType: BOOLEAN
+          defaultValue: 123
+          requiredFlag: 0
+          editFlag: 1
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: COMBOBOX
+          lovCode: XMOD.INDEX_FREQUENCY
+          enabledFlag: 1
+          tenantId: 4
+          projectId: 26
+        - creationDate: "2026-06-18 10:42:37"
+          createdBy: 67585
+          lastUpdateDate: "2026-06-23 09:36:12"
+          lastUpdatedBy: 67585
+          objectVersionNumber: 9
+          _token: Na6lEAn9BpXdIlkrSxax7qPXOvgvm5BHt/FURk67/AZJ1P+x7SfO/m3qaaQGeB7/uxmSQxxV4Rila6Uneogi6g==
+          modelLineId: 3594
+          modelHeaderId: 122
+          attributeCode: testV3
+          attributeName: testV3
+          modelType: BUSINESS
+          modelOrder: 19
+          embeddedFlag: 0
+          extConfig: "[{}]"
+          dataType: STRING
+          requiredFlag: 1
+          editFlag: 1
+          sensitiveFlag: 0
+          processGroupId: 0
+          controlsType: COMBOBOX
+          lovCode: DAAS.INDEX_CALIBER.COMPARISON_OPERATOR
+          enabledFlag: 1
+          tenantId: 4
+          projectId: 26
+      _status: create
+      tenantId: 4
+      projectId: 26
+    extract:
+      index_code: $.indexCode
+    asserts:
+      - type: status_code
+        expected: 200
