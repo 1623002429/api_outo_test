@@ -1,1 +1,86 @@
+API 自动化测试框架依赖清单
+生成时间：2026-06-25
+框架路径：C:\Users\Administrator\Desktop\测试数据\py\指标\api_auto_test
+
+一、必装 Python 库（requirements.txt）
+requests==2.32.3
+pytest==8.3.4
+allure-pytest==2.13.5
+PyYAML==6.0.2
+jsonpath-ng==1.7.0
+
+安装命令：
+pip install -r requirements.txt
+
+二、当前环境实际版本
+Python==3.12.10
+pip==25.0.1
+requests==2.32.3
+pytest==8.3.4
+allure-pytest==2.13.5
+PyYAML==6.0.2
+jsonpath-ng==1.7.0
+allure-python-commons==2.13.5
+ply==3.11
+pytest-html==4.2.0（当前环境已安装，框架非必需）
+pytest-metadata==3.1.1（pytest-html 依赖，框架非必需）
+
+三、间接依赖包
+requests 依赖：certifi、charset-normalizer、idna、urllib3
+pytest 依赖：colorama、iniconfig、packaging、pluggy
+allure-pytest 依赖：allure-python-commons、pytest
+allure-python-commons 依赖：attrs、pluggy
+jsonpath-ng 依赖：ply
+pytest-html 依赖：jinja2、pytest、pytest-metadata
+
+四、非 pip 工具依赖
+Allure CLI==2.13.2
+Java==25.0.1 LTS
+
+Allure 路径：
+D:\Allure\allure-2.13.2\bin\allure
+D:\Allure\allure-2.13.2\bin\allure.bat
+
+Python 路径：
+C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe
+
+pip 路径：
+C:\Users\Administrator\AppData\Local\Programs\Python\Python312\Scripts\pip.exe
+
+Java 可用路径示例：
+C:\Program Files\Eclipse Adoptium\jdk-17.0.19.10-hotspot\bin\java.exe
+C:\Program Files\Common Files\Oracle\Java\javapath\java.exe
+C:\Java\temurin-17\jdk-17.0.19+10-jre\bin\java.exe
+
+五、框架主要能力
+requests：接口请求
+pytest：测试用例执行
+allure-pytest：Allure 测试报告集成
+PyYAML：读取 YAML 测试数据
+jsonpath-ng：响应字段提取和断言
+logging：日志记录
+runtime_context.json：运行时上下文关联数据，自动生成
+
+六、当前框架核心目录/文件
+config/config.yaml：环境和全局 headers 配置
+data/*.yaml：测试数据
+common/request_client.py：请求封装
+common/assert_util.py：中文断言展示
+common/extract_util.py：中文提取展示
+common/case_runner.py：用例执行和 Allure 中文模块分组
+tests/test_topic：主题管理用例
+tests/test_yz_index：原子指标用例
+tests/test_ps_index：派生指标用例
+tests/test_fh_index：复合指标用例
+run.py：一键运行入口
+scripts/run_tests.ps1：PowerShell 快捷运行脚本
+
+七、常用命令
+cd /d C:\Users\Administrator\Desktop\测试数据\py\指标
+python run.py
+
+或：
+cd /d C:\Users\Administrator\Desktop\测试数据\py\指标\api_auto_test
+python -m pytest -s -v
+allure open reports\allure-report
 
